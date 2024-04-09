@@ -116,20 +116,20 @@ $('.what-building__list').on('click', '.what-building__item', foo); // деле�
 //     });
 // });
 
-$('.modal-order__form').submit(function(event) {
+$('.modal-order__form').submit((event) => {
   event.preventDefault();
-  $.ajax({
-    url: 'https://jsonplaceholder.typicode.com/todos',
-    type: 'POST',
-    data: $(this).serialize(),
-    success(data) {
-      modalOrderTitle.text('Спасибо за заявку. Номер заявки:' + data.id);
-      $('.modal-order__form').slideUp(300);
-    },
-    error() {
-      modalOrderTitle.text('Что то пошло не так, попробуйте позже!');
-    },
-  });
+  // $.ajax({
+  //   url: 'https://jsonplaceholder.typicode.com/todos',
+  //   type: 'POST',
+  //   data: $(this).serialize(),
+  //   success(data) {
+  //     modalOrderTitle.text('Спасибо за заявку. Номер заявки:' + data.id);
+  //     $('.modal-order__form').slideUp(300);
+  //   },
+  //   error() {
+  //     modalOrderTitle.text('Что то пошло не так, попробуйте позже!');
+  //   },
+  // });
 });
 
 
@@ -152,3 +152,42 @@ $('.navigation__close').on('click', () => {
     }, 500);
   });
 });
+
+
+const cookieAlert = document.querySelector('.alert-cookie');
+const cookieButton = document.querySelector('.alert-cookie__button');
+
+cookieButton.addEventListener('click', () => {
+  cookieAlert.classList.remove('alert-cookie_no-ready');
+  Cookies.set('dom-ready-cookie', 'true', {
+    expires: 10,
+  });
+});
+
+if (!Cookies.get('dom-ready-cookie')) {
+  cookieAlert.classList.add('alert-cookie_no-ready');
+}
+
+const inputTel = document.querySelector('.modal-order__input_tel');
+const telMask = new Inputmask('+7 (999)-999-99-99');
+
+telMask.mask(inputTel);
+
+const justValidate = new JustValidate('.modal-order__form');
+
+justValidate.addField('.modal-order__input', [
+  {
+    rule: 'required',
+    errorMessage: 'Укажите ваше имя',
+  },
+  {
+    rule: 'minLength',
+    value: 3,
+    errorMessage: 'Не короче 3 символов',
+  },
+  {
+    rule: 'maxLength',
+    value: 30,
+    errorMessage: 'Слишком длинное имя',
+  },
+]);
