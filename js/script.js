@@ -167,7 +167,8 @@ cookieButton.addEventListener('click', () => {
 if (!Cookies.get('dom-ready-cookie')) {
   cookieAlert.classList.add('alert-cookie_no-ready');
 }
-
+const modalTitle = document.querySelector('.modal-order__title');
+const modalOrderFeldset = document.querySelector('.modal-order__fieldset');
 const inputTel = document.querySelector('.modal-order__input_tel');
 const telMask = new Inputmask('+7 (999)-999-99-99');
 
@@ -190,4 +191,46 @@ justValidate.addField('.modal-order__input', [
     value: 30,
     errorMessage: 'Слишком длинное имя',
   },
-]);
+])
+  .addField('.modal-order__input_email', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите ваш email',
+    },
+    {
+      rule: 'email',
+      errorMessage: 'Email не корректный',
+    },
+  ])
+  .addField('.modal-order__input_tel', [
+    {
+      rule: 'required',
+      errorMessage: 'Укажите ваш номер телефона',
+    },
+    {
+      validator(value) {
+        const phone = inputTel.inputmask.unmaskedvalue();
+        return !!(Number(phone) && phone.length === 10);
+      },
+      errorMessage: 'Телефон не корректный',
+    },
+  ])
+  .onSuccess(event => {
+    const target = event.target;
+    axios.post('https://jsonplaceholder.typicode.com/posts', {
+      name: target.name.value,
+      tel: target.tel.value,
+      email: target.email.value,
+    })
+      .then(response => {
+        target.reset();
+        console.log(response);
+        modalTitle.textContent = `Спасибо, ваша заявка принята, номер заявки
+          ${response.data.id}`;
+        modalOrderFeldset.disabled = true;
+      })
+      .catch(err => {
+        modalOrderFeldset.disabled = false;
+        modalTitle.textContent = `Что-то пошло не так, попробуйте позже!`;
+      });
+  });
