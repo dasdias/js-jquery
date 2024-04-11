@@ -234,3 +234,15 @@ justValidate.addField('.modal-order__input', [
         modalTitle.textContent = `Что-то пошло не так, попробуйте позже!`;
       });
   });
+
+const swiper = new Swiper('.swiper', {
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+  },
+  slidesPerView: 3,
+  navigation: {
+    nextEl: '.slider__button-right',
+    prevEl: '.slider__button-left',
+  },
+});
