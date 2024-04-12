@@ -245,4 +245,16 @@ const swiper = new Swiper('.swiper', {
     nextEl: '.slider__button-right',
     prevEl: '.slider__button-left',
   },
+  breakpoints: {
+    320: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    1024: {
+      slidesPerView: 3,
+      spaceBetween: 10,
+    },
+  },
 });
+const characteristicsList = document.querySelector('.characteristics__list');
+const characteristicsItem = document.querySelectorAll('.characteristics__item');
